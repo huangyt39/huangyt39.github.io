@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机基础,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="应用层应用层协议原理应用层程序体系结构客户机/服务器体系结构：Web、FTP、Telent、e-mail P2P体系结构：电话、文件分发、PTV 发起通信的进程为客户机，会话开始时等待联系的进程为服务器 套接字应用程序通过套接字收发报文，套接字是应用程序进程和传输层协议之间的接口 支持应用的传输层协议   应用 应用层协议 传输层协议     邮件 SMTP TCP   远程终端访问 Telent">
+<meta name="keywords" content="计算机基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网总结（二）：应用层">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/计网总结（二）：应用层/index.html">
+<meta property="og:site_name" content="MyBlog">
+<meta property="og:description" content="应用层应用层协议原理应用层程序体系结构客户机/服务器体系结构：Web、FTP、Telent、e-mail P2P体系结构：电话、文件分发、PTV 发起通信的进程为客户机，会话开始时等待联系的进程为服务器 套接字应用程序通过套接字收发报文，套接字是应用程序进程和传输层协议之间的接口 支持应用的传输层协议   应用 应用层协议 传输层协议     邮件 SMTP TCP   远程终端访问 Telent">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/01/10/计网总结（二）：应用层/计网总结（二）：应用层/httprq.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/10/计网总结（二）：应用层/计网总结（二）：应用层/httprp.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/10/计网总结（二）：应用层/socket.png">
+<meta property="og:updated_time" content="2019-01-10T14:41:04.124Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网总结（二）：应用层">
+<meta name="twitter:description" content="应用层应用层协议原理应用层程序体系结构客户机/服务器体系结构：Web、FTP、Telent、e-mail P2P体系结构：电话、文件分发、PTV 发起通信的进程为客户机，会话开始时等待联系的进程为服务器 套接字应用程序通过套接字收发报文，套接字是应用程序进程和传输层协议之间的接口 支持应用的传输层协议   应用 应用层协议 传输层协议     邮件 SMTP TCP   远程终端访问 Telent">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/10/计网总结（二）：应用层/计网总结（二）：应用层/httprq.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/10/计网总结（二）：应用层/">
+
+
+
+
+
+  <title>计网总结（二）：应用层 | MyBlog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MyBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/计网总结（二）：应用层/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyt">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MyBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计网总结（二）：应用层</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T22:35:56+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><h3 id="应用层协议原理"><a href="#应用层协议原理" class="headerlink" title="应用层协议原理"></a>应用层协议原理</h3><h4 id="应用层程序体系结构"><a href="#应用层程序体系结构" class="headerlink" title="应用层程序体系结构"></a>应用层程序体系结构</h4><p>客户机/服务器体系结构：Web、FTP、Telent、e-mail</p>
+<p>P2P体系结构：电话、文件分发、PTV</p>
+<p>发起通信的进程为客户机，会话开始时等待联系的进程为服务器</p>
+<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><p>应用程序通过套接字收发报文，套接字是应用程序进程和传输层协议之间的接口</p>
+<h4 id="支持应用的传输层协议"><a href="#支持应用的传输层协议" class="headerlink" title="支持应用的传输层协议"></a>支持应用的传输层协议</h4><table>
+<thead>
+<tr>
+<th>应用</th>
+<th>应用层协议</th>
+<th>传输层协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>邮件</td>
+<td>SMTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>远程终端访问</td>
+<td>Telent</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>HTTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>文件传输</td>
+<td>FTP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>流媒体</td>
+<td>HTTP、RTP</td>
+<td>TCP或UDP</td>
+</tr>
+<tr>
+<td>因特网电话</td>
+<td>SIP、RTP</td>
+<td>UDP</td>
+</tr>
+<tr>
+<td>目录服务</td>
+<td>DNS</td>
+<td>UDP</td>
+</tr>
+</tbody>
+</table>
+<h4 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a>进程寻址</h4><p>识别接受进程需要的信息</p>
+<ul>
+<li>主机的名称或地址：ip地址</li>
+<li>用来指定目的主机上接受进程的标识：端口号</li>
+</ul>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>超文本传输协议</p>
+<p>HTTP是无状态协议：不保存关于用户机的任何信息</p>
+<h4 id="报文结构"><a href="#报文结构" class="headerlink" title="报文结构"></a>报文结构</h4><h5 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h5><p><img src="计网总结（二）：应用层/httprq.png" alt=""></p>
+<h5 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h5><p><img src="计网总结（二）：应用层/httprp.png" alt=""></p>
+<h4 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>类别</th>
+<th>原因短语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1XX</td>
+<td>Informational（信息性状态码）</td>
+<td>接收的请求正在处理</td>
+</tr>
+<tr>
+<td>2XX</td>
+<td>Success（成功状态码）</td>
+<td>请求正常处理完毕</td>
+</tr>
+<tr>
+<td>3XX</td>
+<td>Redirection（重定向状态码）</td>
+<td>需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td>4XX</td>
+<td>Client Error（客户端错误状态码）</td>
+<td>服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5XX</td>
+<td>Server Error（服务器错误状态码）</td>
+<td>服务器处理请求出错</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Cookie和Session的区别"><a href="#Cookie和Session的区别" class="headerlink" title="Cookie和Session的区别"></a>Cookie和Session的区别</h4><p>Cookie和session都是用来跟踪浏览器用户身份的会话方式</p>
+<p>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；<br>Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</p>
+<h4 id="Web缓存"><a href="#Web缓存" class="headerlink" title="Web缓存"></a>Web缓存</h4><p>Web缓存器也称代理服务器，有自己的磁盘存储空间，并在该存储空间中保存最近请求过的对象的拷贝</p>
+<p>p70 2-11</p>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><ul>
+<li>可以减少对客户机请求的相应时间</li>
+<li>可以减少一个机构内部网与因特网接入链路上的通信量</li>
+</ul>
+<h4 id="条件GET方法"><a href="#条件GET方法" class="headerlink" title="条件GET方法"></a>条件GET方法</h4><h4 id="持久与非持久HTTP"><a href="#持久与非持久HTTP" class="headerlink" title="持久与非持久HTTP"></a>持久与非持久HTTP</h4><ul>
+<li>持久HTTP：连接持续期间，C-S经由一个服务器套接字交换HTTP报文</li>
+<li>非持久HTTP：对每一对请求/响应，都有一个新的TCP连接被创建，完成后即关闭</li>
+</ul>
+<p>HTTP详见<a href="https://www.jianshu.com/p/a6d086a3997d" target="_blank" rel="noopener">https://www.jianshu.com/p/a6d086a3997d</a></p>
+<h3 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h3><p>FTP使用两个并行的TCP连接来传输文件，一个是控制连接（21端口）一个是数据连接（20端口）</p>
+<p>控制连接贯穿了整个用户会话期间，但是会话中的每一次文件传输都需要建立一个新的数据连接</p>
+<p>FTP使用分离的控制连接，故FTP的控制信息是带外的</p>
+<p>FTP命令与回答用ASCII格式在控制连接上传送</p>
+<h3 id="邮件传输协议"><a href="#邮件传输协议" class="headerlink" title="邮件传输协议"></a>邮件传输协议</h3><h4 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a>SMTP</h4><p>p76 2-16</p>
+<p>邮件服务器之间使用SMTP传送邮件</p>
+<p>SMTP一般不用中间邮件服务器发送文件（两端直连）</p>
+<p>邮件报文的主体部分职能用7位ASCII码表示，在传送邮件之前和之后需要编码和解码</p>
+<h5 id="与HTTP的区别"><a href="#与HTTP的区别" class="headerlink" title="与HTTP的区别"></a>与HTTP的区别</h5><ul>
+<li>拉协议vs推协议</li>
+<li>SMTP要求7位ASCII码</li>
+<li>HTTP用带内控制，FTP用带外控制</li>
+</ul>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><h4 id="DNS组成"><a href="#DNS组成" class="headerlink" title="DNS组成"></a>DNS组成</h4><ul>
+<li>分层的DNS服务器实现的分布式数据库</li>
+<li>允许主机查询数据库的应用层协议</li>
+</ul>
+<h4 id="DNS服务器的层次结构"><a href="#DNS服务器的层次结构" class="headerlink" title="DNS服务器的层次结构"></a>DNS服务器的层次结构</h4><p>根DNS服务器-&gt;顶级域服务器（TLD）-&gt;权威DNS服务器-&gt;本地DNS服务器</p>
+<p>p89 2-21</p>
+<p>DNS缓存：当DNS服务器接收到一个DNS回答时会将其缓存</p>
+<h4 id="使用UDP协议的原因："><a href="#使用UDP协议的原因：" class="headerlink" title="使用UDP协议的原因："></a>使用UDP协议的原因：</h4><p>客户端向DNS服务器查询域名，一般返回的内容都不超过512字节，用UDP传输即可。不用经过TCP三次握手，这样DNS服务器负载更低，响应更快。虽然从理论上说，客户端也可以指定向DNS服务器查询的时候使用TCP，但事实上，很多DNS服务器进行配置的时候，仅支持UDP查询包</p>
+<h4 id="资源记录"><a href="#资源记录" class="headerlink" title="资源记录"></a>资源记录</h4><p>提供主机名到IP地址的映射</p>
+<p>（Name，Value，Type，TTL）</p>
+<p>TTL：记录的生存时间（资源应从缓存中删除的时间）</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>IP地址</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>权威DNS服务器的主机名</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>别名为Name的主机对应的规范主机名</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>别名为Name的邮件服务器的规范主机名</td>
+</tr>
+</tbody>
+</table>
+<h4 id="DNS报文"><a href="#DNS报文" class="headerlink" title="DNS报文"></a>DNS报文</h4><p>p91 2-23</p>
+<h3 id="P2P应用"><a href="#P2P应用" class="headerlink" title="P2P应用"></a>P2P应用</h3><p>C-S体系结构的缺点：分发时间由NF/u决定，随着对等方的数量N线性地增加</p>
+<h3 id="socket编程"><a href="#socket编程" class="headerlink" title="socket编程"></a>socket编程</h3><h4 id="TCP的socket编程"><a href="#TCP的socket编程" class="headerlink" title="TCP的socket编程"></a>TCP的socket编程</h4><p><img src="/2019/01/10/计网总结（二）：应用层/socket.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机基础/" rel="tag"># 计算机基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/10/计网总结（一）：计算机网络与因特网/" rel="next" title="计网总结（一）：计算机网络与因特网">
+                <i class="fa fa-chevron-left"></i> 计网总结（一）：计算机网络与因特网
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/10/计网总结（三）：传输层/" rel="prev" title="计网总结（三）：传输层">
+                计网总结（三）：传输层 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">huangyt</p>
+              <p class="site-description motion-element" itemprop="description">Blogs of learning CS</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/huangyt39" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用层"><span class="nav-number">1.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层协议原理"><span class="nav-number">1.1.</span> <span class="nav-text">应用层协议原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#应用层程序体系结构"><span class="nav-number">1.1.1.</span> <span class="nav-text">应用层程序体系结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#套接字"><span class="nav-number">1.1.2.</span> <span class="nav-text">套接字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支持应用的传输层协议"><span class="nav-number">1.1.3.</span> <span class="nav-text">支持应用的传输层协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程寻址"><span class="nav-number">1.1.4.</span> <span class="nav-text">进程寻址</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#报文结构"><span class="nav-number">1.2.1.</span> <span class="nav-text">报文结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#请求报文"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">请求报文</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#响应报文"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">响应报文</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP状态码"><span class="nav-number">1.2.2.</span> <span class="nav-text">HTTP状态码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie和Session的区别"><span class="nav-number">1.2.3.</span> <span class="nav-text">Cookie和Session的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web缓存"><span class="nav-number">1.2.4.</span> <span class="nav-text">Web缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件GET方法"><span class="nav-number">1.2.5.</span> <span class="nav-text">条件GET方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久与非持久HTTP"><span class="nav-number">1.2.6.</span> <span class="nav-text">持久与非持久HTTP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FTP"><span class="nav-number">1.3.</span> <span class="nav-text">FTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邮件传输协议"><span class="nav-number">1.4.</span> <span class="nav-text">邮件传输协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SMTP"><span class="nav-number">1.4.1.</span> <span class="nav-text">SMTP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#与HTTP的区别"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">与HTTP的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS"><span class="nav-number">1.5.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS组成"><span class="nav-number">1.5.1.</span> <span class="nav-text">DNS组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS服务器的层次结构"><span class="nav-number">1.5.2.</span> <span class="nav-text">DNS服务器的层次结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用UDP协议的原因："><span class="nav-number">1.5.3.</span> <span class="nav-text">使用UDP协议的原因：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源记录"><span class="nav-number">1.5.4.</span> <span class="nav-text">资源记录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS报文"><span class="nav-number">1.5.5.</span> <span class="nav-text">DNS报文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P应用"><span class="nav-number">1.6.</span> <span class="nav-text">P2P应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket编程"><span class="nav-number">1.7.</span> <span class="nav-text">socket编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP的socket编程"><span class="nav-number">1.7.1.</span> <span class="nav-text">TCP的socket编程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyt</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

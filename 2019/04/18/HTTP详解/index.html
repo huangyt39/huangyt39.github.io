@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机基础,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文为《图解http》的笔记，主要补充http相关的计算机网络知识 HTTP基础URI某个协议方案表示的资源定位标识符。协议方案指访问资源所用的协议类型名称。  请求URI可以为绝对URI，也可以为相对URI并且在首部字段Host中写明网络域名或IP地址 报文报文=报文首部 + 报文主体，由一个空行（CR+LF）划分 报文VS实体 报文：http通信的基本单位，由8位字节流组成 实体：作为请求或响">
+<meta name="keywords" content="计算机基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP详解">
+<meta property="og:url" content="http://yoursite.com/2019/04/18/HTTP详解/index.html">
+<meta property="og:site_name" content="MyBlog">
+<meta property="og:description" content="本文为《图解http》的笔记，主要补充http相关的计算机网络知识 HTTP基础URI某个协议方案表示的资源定位标识符。协议方案指访问资源所用的协议类型名称。  请求URI可以为绝对URI，也可以为相对URI并且在首部字段Host中写明网络域名或IP地址 报文报文=报文首部 + 报文主体，由一个空行（CR+LF）划分 报文VS实体 报文：http通信的基本单位，由8位字节流组成 实体：作为请求或响">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555410041635.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555410100190.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555410136328.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555496635805.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555500154422.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555500178747.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555500199054.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555499743903.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555500564455.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555500598866.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555501195373.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555501712193.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555502713615.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555504189653.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555504200465.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555505046673.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555505242502.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555505794662.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555505910689.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555506163122.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555506189416.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555506908313.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555507128268.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555507877036.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509389819.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509441737.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509420941.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509497778.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509669501.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509677609.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555509957604.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555510070913.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555510186494.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555556011317.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555557659047.png">
+<meta property="og:updated_time" content="2019-04-18T05:55:50.599Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP详解">
+<meta name="twitter:description" content="本文为《图解http》的笔记，主要补充http相关的计算机网络知识 HTTP基础URI某个协议方案表示的资源定位标识符。协议方案指访问资源所用的协议类型名称。  请求URI可以为绝对URI，也可以为相对URI并且在首部字段Host中写明网络域名或IP地址 报文报文=报文首部 + 报文主体，由一个空行（CR+LF）划分 报文VS实体 报文：http通信的基本单位，由8位字节流组成 实体：作为请求或响">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/18/HTTP详解/1555410041635.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/18/HTTP详解/">
+
+
+
+
+
+  <title>HTTP详解 | MyBlog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MyBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/18/HTTP详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyt">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MyBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HTTP详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-18T13:30:22+08:00">
+                2019-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文为《图解http》的笔记，主要补充http相关的计算机网络知识</p>
+<h2 id="HTTP基础"><a href="#HTTP基础" class="headerlink" title="HTTP基础"></a>HTTP基础</h2><h3 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h3><p>某个协议方案表示的资源定位标识符。协议方案指访问资源所用的协议类型名称。</p>
+<p><img src="/2019/04/18/HTTP详解/1555410041635.png" alt="1555410041635"></p>
+<p>请求URI可以为绝对URI，也可以为相对URI并且在首部字段Host中写明网络域名或IP地址</p>
+<h3 id="报文"><a href="#报文" class="headerlink" title="报文"></a>报文</h3><p>报文=报文首部 + 报文主体，由一个空行（CR+LF）划分</p>
+<h4 id="报文VS实体"><a href="#报文VS实体" class="headerlink" title="报文VS实体"></a>报文VS实体</h4><ul>
+<li>报文：http通信的基本单位，由8位字节流组成</li>
+<li>实体：作为请求或响应的有效载荷数据被传输，由实体首部和实体主体组成</li>
+<li>通常，报文主体等于实体主体，只有当传输中进行编码操作时，实体主体的内容才会发生变化，区别于报文主体</li>
+</ul>
+<h4 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h4><p><img src="/2019/04/18/HTTP详解/1555410100190.png" alt="1555410100190"></p>
+<h4 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h4><p><img src="/2019/04/18/HTTP详解/1555410136328.png" alt="1555410136328"></p>
+<h3 id="HTTP方法"><a href="#HTTP方法" class="headerlink" title="HTTP方法"></a>HTTP方法</h3><p>GET、POST</p>
+<h4 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h4><p>上传文件，在报文主体中包含文件内容；但不带验证机制，存在安全性问题，一般不使用</p>
+<h4 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h4><p>和GET一样，但是不返回报文主体部分，用于确认URI的有效性和资源更新的日期时间等</p>
+<h4 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h4><p>与PUT相反，也不带验证机制</p>
+<p>PUT和DELETE配合Web的验证机制，遵守REST标准时可以开放使用</p>
+<h4 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h4><p>查询URI的资源支持的方法</p>
+<h4 id="TRACE"><a href="#TRACE" class="headerlink" title="TRACE"></a>TRACE</h4><p>追踪路径，在Max-Forwards首部填入数值（跳数），最后接收到请求的服务器返回200OK</p>
+<p>不常用，而且容易引发XST（跨站追踪）攻击</p>
+<h4 id="CONNECT"><a href="#CONNECT" class="headerlink" title="CONNECT"></a>CONNECT</h4><p>要求与代理服务器通信时建立隧道，用隧道协议进行TCP通信，主要用SSL和TLS进行加密</p>
+<p><img src="/2019/04/18/HTTP详解/1555496635805.png" alt="1555496635805"></p>
+<h3 id="分块传输编码"><a href="#分块传输编码" class="headerlink" title="分块传输编码"></a>分块传输编码</h3><p>将实体主体分为多个部分，每一块用16进制来标记块的大小，实体主体的最后一块会使用“0（CR+LF）”来标记</p>
+<h3 id="获取部分内容的范围请求"><a href="#获取部分内容的范围请求" class="headerlink" title="获取部分内容的范围请求"></a>获取部分内容的范围请求</h3><p>用首部字段Range来指定资源的byte范围</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Range：bytes=5001-10000</span><br></pre></td></tr></table></figure>
+<p>对于范围请求会返回状态码为206Partial Content的响应报文；若服务器无法响应范围请求，会返回状态码200OK的完整实体内容</p>
+<h2 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>类别</th>
+<th>原因短语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1xx</td>
+<td>Informational</td>
+<td>请求正在处理</td>
+</tr>
+<tr>
+<td>2xx</td>
+<td>Success</td>
+<td>请求处理完毕</td>
+</tr>
+<tr>
+<td>3xx</td>
+<td>Redirection</td>
+<td>需要附加操作来完成请求</td>
+</tr>
+<tr>
+<td>4xx</td>
+<td>Client Error</td>
+<td>服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5xx</td>
+<td>Server Error</td>
+<td>服务器处理请求出错</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2XX-成功"><a href="#2XX-成功" class="headerlink" title="2XX 成功"></a>2XX 成功</h3><h4 id="200-OK"><a href="#200-OK" class="headerlink" title="200 OK"></a>200 OK</h4><p>正常处理</p>
+<h4 id="204-No-Content"><a href="#204-No-Content" class="headerlink" title="204 No Content"></a>204 No Content</h4><p>成功处理，但返回的相应报文中不包含实体的主体部分。一般在只需从客户端往服务器发送信息，而对客户端不需要发送新信息内容的情况下使用。</p>
+<p>如在PUT请求中进行资源更新，但是不需要改变当前展示给用户的页面。</p>
+<h4 id="206-Partial-Content"><a href="#206-Partial-Content" class="headerlink" title="206 Partial Content"></a>206 Partial Content</h4><p>进行了范围请求，服务器成功执行，响应报文中用Content-Range指定范围的实体内容</p>
+<h3 id="3XX-重定向"><a href="#3XX-重定向" class="headerlink" title="3XX 重定向"></a>3XX 重定向</h3><h4 id="301-Moved-Permanently"><a href="#301-Moved-Permanently" class="headerlink" title="301 Moved Permanently"></a>301 Moved Permanently</h4><p>永久重定向。浏览器会跳转到重定向的URI并记录下来，以后每次访问次URI都会进行跳转，而不会对该URI发起请求</p>
+<h4 id="302-Found"><a href="#302-Found" class="headerlink" title="302 Found"></a>302 Found</h4><p>临时重定向。跳转到重定向的URI，但不会记录在浏览器中</p>
+<h4 id="303-See-Other"><a href="#303-See-Other" class="headerlink" title="303 See Other"></a>303 See Other</h4><p>类似302，通常作为 PUT或 POST操作的返回结果，区别在于表示客户端应该使用GET方法获取资源</p>
+<p>浏览器得到301302303时，都会把POST改为GET，删除请求报文中的主体，自动重发</p>
+<h4 id="304-Not-Modified"><a href="#304-Not-Modified" class="headerlink" title="304 Not Modified"></a>304 Not Modified</h4><p>未满足请求报文中的条件，不包含响应的主体部分</p>
+<h4 id="307-Temporary-Redirect"><a href="#307-Temporary-Redirect" class="headerlink" title="307 Temporary Redirect"></a>307 Temporary Redirect</h4><p>与302相同，但是不会从POST变为GET</p>
+<p>注意POST请求的重定向要使用307</p>
+<h3 id="4XX-客户端错误"><a href="#4XX-客户端错误" class="headerlink" title="4XX 客户端错误"></a>4XX 客户端错误</h3><h4 id="400-Bad-Request"><a href="#400-Bad-Request" class="headerlink" title="400 Bad Request"></a>400 Bad Request</h4><p>报文中存在语法错误</p>
+<h4 id="401-Unauthorized"><a href="#401-Unauthorized" class="headerlink" title="401 Unauthorized"></a>401 Unauthorized</h4><p>第一次发送表示需要有用过Http认证的认证信息；第二次发送表示用户认证失败</p>
+<h4 id="403-Forbidden"><a href="#403-Forbidden" class="headerlink" title="403 Forbidden"></a>403 Forbidden</h4><p>请求资源的访问被服务器拒绝</p>
+<h4 id="404-Not-Found"><a href="#404-Not-Found" class="headerlink" title="404 Not Found"></a>404 Not Found</h4><h3 id="5XX-服务器错误"><a href="#5XX-服务器错误" class="headerlink" title="5XX 服务器错误"></a>5XX 服务器错误</h3><h4 id="500-Internal-Server-Error"><a href="#500-Internal-Server-Error" class="headerlink" title="500 Internal Server Error"></a>500 Internal Server Error</h4><p>服务端在执行请求时发生错误</p>
+<h4 id="502-Bad-Gateway"><a href="#502-Bad-Gateway" class="headerlink" title="502 Bad Gateway"></a>502 Bad Gateway</h4><p>上游服务器故障</p>
+<h4 id="504-Gateway-Timeout"><a href="#504-Gateway-Timeout" class="headerlink" title="504 Gateway Timeout"></a>504 Gateway Timeout</h4><p>扮演网关或者代理的服务器无法在规定的时间内获得想要的响应，上游服务执行超时（超过代理网关的等待时间）</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p><img src="/2019/04/18/HTTP详解/1555500154422.png" alt="1555500154422"></p>
+<h4 id="永久重定向之间的区别"><a href="#永久重定向之间的区别" class="headerlink" title="永久重定向之间的区别"></a>永久重定向之间的区别</h4><p><img src="/2019/04/18/HTTP详解/1555500178747.png" alt="1555500178747"></p>
+<h4 id="临时重定向的区别"><a href="#临时重定向的区别" class="headerlink" title="临时重定向的区别"></a>临时重定向的区别</h4><p><img src="/2019/04/18/HTTP详解/1555500199054.png" alt="1555500199054"></p>
+<h2 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h2><h3 id="数据转发"><a href="#数据转发" class="headerlink" title="数据转发"></a>数据转发</h3><h4 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h4><p>服务器和客户端的中间人</p>
+<p>代理不改变URI，每次通过代理服务器转发请求或响应时，会追加写入Via首部信息</p>
+<p><img src="/2019/04/18/HTTP详解/1555499743903.png" alt="1555499743903"></p>
+<p>优点：使用缓存减少流量；实现特定URI访问控制、获取访问日志..</p>
+<ul>
+<li>缓存代理：将资源副本保存在服务器上，代理再次收到相同请求时可以不获取资源，直接将缓存的资源作为响应返回</li>
+<li>透明代理：不对报文做任何加工</li>
+</ul>
+<h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>转发其他服务器通信数据的服务器，类似代理但可以提供非HTTP服务</p>
+<p>可以提高通信安全性，因为可以在客户端和网关之间的通信线路上加密确保安全</p>
+<h4 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h4><p>在客户端和服务器间中转，并保持双方通信连接。目的是确保客户端和服务器进行安全的通信。隧道不会解析HTTP请求，保持原样</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>大致可归为两类：私有与共享缓存。共享缓存存储的响应能够被多个用户使用。私有缓存只能用于单独用户。包括浏览器与代理缓存，除此之外还有网关缓存、CDN、反向代理缓存和负载均衡器等部署在服务器上</p>
+<p><img src="/2019/04/18/HTTP详解/1555500564455.png" alt="1555500564455"></p>
+<p><img src="/2019/04/18/HTTP详解/1555500598866.png" alt="1555500598866"></p>
+<p>若不超过缓存的有效期限则不请求服务器，直接返回</p>
+<h4 id="客户端的缓存"><a href="#客户端的缓存" class="headerlink" title="客户端的缓存"></a>客户端的缓存</h4><p>缓存在浏览器中，称为临时网络文件</p>
+<h4 id="缓存验证"><a href="#缓存验证" class="headerlink" title="缓存验证"></a>缓存验证</h4><h5 id="强校验器"><a href="#强校验器" class="headerlink" title="强校验器"></a>强校验器</h5><p>ETag响应头是一个对用户代理不透明的值。对于像浏览器这样的HTTP UA，不知道ETag代表什么，不能预测它的值是多少。如果资源请求的响应头里含有ETag, 客户端可以在后续的请求的头中带上 If-None-Match头来验证缓存</p>
+<p>用首部If-Match来比较ETag</p>
+<h5 id="弱校验器"><a href="#弱校验器" class="headerlink" title="弱校验器"></a>弱校验器</h5><p>Last-Modified响应头可以作为一种弱校验器。说它弱是因为它只能精确到一秒。如果响应头里含有这个信息，客户端可以在后续的请求中带上 If-Modified-Since来验证缓存</p>
+<h4 id="带Vary头的响应"><a href="#带Vary头的响应" class="headerlink" title="带Vary头的响应"></a>带Vary头的响应</h4><p>决定了对于后续的请求头，如何判断是请求一个新的资源还是使用缓存的文件</p>
+<p>当缓存服务器收到一个请求，只有当前的请求和原始（缓存）的请求头跟缓存的响应头里的Vary都匹配，才能使用缓存的响应</p>
+<p><img src="/2019/04/18/HTTP详解/1555501195373.png" alt="1555501195373"></p>
+<h2 id="HTTP首部"><a href="#HTTP首部" class="headerlink" title="HTTP首部"></a>HTTP首部</h2><h4 id="End2End-VS-HopbyHop"><a href="#End2End-VS-HopbyHop" class="headerlink" title="End2End VS HopbyHop"></a>End2End VS HopbyHop</h4><ul>
+<li>End2End会转发给最终目标</li>
+<li>HopbyHop只对单次转发有效</li>
+<li>Http/1.1之后如果要使用HopbyHop首部，需提供Connection首部字段</li>
+</ul>
+<h3 id="通用首部"><a href="#通用首部" class="headerlink" title="通用首部"></a>通用首部</h3><h4 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h4><p>指定缓存工作机制（是否、最大Age值…）</p>
+<p>请求指令：no-cache、no-store、max-age=100….</p>
+<p>响应指令：public、no-cache、no-transform…</p>
+<p><img src="/2019/04/18/HTTP详解/1555501712193.png" alt="1555501712193"></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="noopener">Cache-Control详细指令的含义</a></p>
+<h4 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h4><p>作用：控制不再转发给代理的首部字段、管理持久连接</p>
+<p>Connection：不再转发的首部字段名</p>
+<p>服务器端想明确断开连接时，Connection：Close</p>
+<h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>表明创建HTTP报文的日期和时间</p>
+<h4 id="Pragama"><a href="#Pragama" class="headerlink" title="Pragama"></a>Pragama</h4><p>仅作为与HTTP/1.0的向后兼容而定义</p>
+<h4 id="Trailer"><a href="#Trailer" class="headerlink" title="Trailer"></a>Trailer</h4><p>实现说明在报文主体后记录了哪些首部字段</p>
+<h4 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h4><p>规定传输报文主体时采用的编码方式，HTTP/1.1的传输编码方式仅对分块传输编码有效</p>
+<h4 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h4><p>检测HTTP协议及其他协议是否可以使用更高版本进行通信</p>
+<p><img src="/2019/04/18/HTTP详解/1555502713615.png" alt="1555502713615"></p>
+<h4 id="Via"><a href="#Via" class="headerlink" title="Via"></a>Via</h4><p>追踪客户端和服务器之间的请求和响应报文的传输路径。经过代理或网关时会现在Via中附加该服务器的信息，再转发。Via还可以避免请求回环的发生。常和TRACE方法一起使用</p>
+<h3 id="请求首部字段"><a href="#请求首部字段" class="headerlink" title="请求首部字段"></a>请求首部字段</h3><h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>通知服务器用户代理能处理的媒体类型及相对优先级</p>
+<p>可以使用q=来表示额外的权重 0-1 用分号隔离</p>
+<h4 id="Accep-Charset"><a href="#Accep-Charset" class="headerlink" title="Accep-Charset"></a>Accep-Charset</h4><p>支持的字符集和相对优先级</p>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>支持的内容编码和相对优先级</p>
+<h4 id="Accept-Language"><a href="#Accept-Language" class="headerlink" title="Accept-Language"></a>Accept-Language</h4><p>支持的语言和相对优先级</p>
+<h4 id="Authorization"><a href="#Authorization" class="headerlink" title="Authorization"></a>Authorization</h4><p>用户代理的认证信息</p>
+<h4 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h4><p>虚拟主机运行在同一个IP上，用Host加以区分</p>
+<h4 id="If-xxx"><a href="#If-xxx" class="headerlink" title="If-xxx"></a>If-xxx</h4><p>条件请求，只有当条件为真服务器才会处理请求</p>
+<h4 id="If-Modified-Since"><a href="#If-Modified-Since" class="headerlink" title="If-Modified-Since"></a>If-Modified-Since</h4><p>告知服务器若字段值早于资源更新的时间则处理该请求，否则返回304</p>
+<h4 id="Max-Forwards"><a href="#Max-Forwards" class="headerlink" title="Max-Forwards"></a>Max-Forwards</h4><p>可经过的服务器最大数目，每经过一个服务器-1</p>
+<h4 id="User-Agent"><a href="#User-Agent" class="headerlink" title="User-Agent"></a>User-Agent</h4><p>传达浏览器的种类</p>
+<h3 id="响应首部字段"><a href="#响应首部字段" class="headerlink" title="响应首部字段"></a>响应首部字段</h3><h4 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h4><p>告知客户端实体标识</p>
+<h4 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h4><p>重定向时提供重定向的URI</p>
+<h4 id="WWW-Authenticate"><a href="#WWW-Authenticate" class="headerlink" title="WWW-Authenticate"></a>WWW-Authenticate</h4><p>用于HTTP访问认证，告知客户端适用的认证方案</p>
+<h3 id="实体首部字段"><a href="#实体首部字段" class="headerlink" title="实体首部字段"></a>实体首部字段</h3><h4 id="Allow"><a href="#Allow" class="headerlink" title="Allow"></a>Allow</h4><p>通知客户端能够支持URI指定资源的所有HTTP方法</p>
+<h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>对实体的主题部分选用的内容编码方式，主要包括：gzip、compress、deflate、identity</p>
+<h4 id="Content-Location"><a href="#Content-Location" class="headerlink" title="Content-Location"></a>Content-Location</h4><p>报文主体返回资源对应的URI</p>
+<p>如返回的页面内容与实际请求的对象不同时会写明URI</p>
+<h3 id="Cookie相关字段"><a href="#Cookie相关字段" class="headerlink" title="Cookie相关字段"></a>Cookie相关字段</h3><p>Cookie作用：对无状态协议HTTP的补充</p>
+<h4 id="Set-Cookie"><a href="#Set-Cookie" class="headerlink" title="Set-Cookie"></a>Set-Cookie</h4><p><img src="/2019/04/18/HTTP详解/1555504189653.png" alt="1555504189653"></p>
+<p><img src="/2019/04/18/HTTP详解/1555504200465.png" alt="1555504200465"></p>
+<p>HttpOnly可以放止跨站脚本攻击（XSS）对Cookie信息的窃取，即无法通过doument.cookie获取Cookie内容</p>
+<h4 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h4><h3 id="其他首部字段"><a href="#其他首部字段" class="headerlink" title="其他首部字段"></a>其他首部字段</h3><h4 id="X-XSS-Protection"><a href="#X-XSS-Protection" class="headerlink" title="X-XSS-Protection"></a>X-XSS-Protection</h4><p>用于控制浏览器XSS防护机制的开关</p>
+<h2 id="Web安全"><a href="#Web安全" class="headerlink" title="Web安全"></a>Web安全</h2><h4 id="HTTP缺点"><a href="#HTTP缺点" class="headerlink" title="HTTP缺点"></a>HTTP缺点</h4><ul>
+<li>明文通信，内容可能被窃听：SSL和TLS组合使用进行加密</li>
+<li>不验证通信方身份，可能遭遇伪装：在开始通信前先确认服务器的证书</li>
+<li>很迷报文的完整性，可能被篡改：散列值校验、数字签名</li>
+</ul>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>HTTPS = HTTP + 加密 + 认证 + 完整性保护</p>
+<p><img src="/2019/04/18/HTTP详解/1555505046673.png" alt="1555505046673"></p>
+<p>HTTPS采用混合加密机制，若密钥能实现安全交换，则考虑仅用公开密钥加密，但是其处理速度比共享密钥加密要慢</p>
+<p><img src="/2019/04/18/HTTP详解/1555505242502.png" alt="1555505242502"></p>
+<h3 id="证书"><a href="#证书" class="headerlink" title="证书"></a>证书</h3><p>作用：证明密钥正确性</p>
+<p><img src="/2019/04/18/HTTP详解/1555505794662.png" alt="1555505794662"></p>
+<h3 id="HTTPS通信"><a href="#HTTPS通信" class="headerlink" title="HTTPS通信"></a>HTTPS通信</h3><p><img src="/2019/04/18/HTTP详解/1555505910689.png" alt="1555505910689"></p>
+<p><img src="/2019/04/18/HTTP详解/1555506163122.png" alt="1555506163122"></p>
+<p><img src="/2019/04/18/HTTP详解/1555506189416.png" alt="1555506189416"></p>
+<p>以上流程中，应用层发送数据时会附加MAC的报文摘要，查知报文是否被篡改，保护报文完整性</p>
+<p>但HTTPS也存在速度慢，消耗CPU和你内存资源的问题</p>
+<h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="BASIC认证"><a href="#BASIC认证" class="headerlink" title="BASIC认证"></a>BASIC认证</h3><p><img src="/2019/04/18/HTTP详解/1555506908313.png" alt="1555506908313"></p>
+<p>Base64不是加密处理，不需要附加信息即可解码</p>
+<h3 id="DIGEST认证"><a href="#DIGEST认证" class="headerlink" title="DIGEST认证"></a>DIGEST认证</h3><p>使用质询/响应的方式，不直接发送明文密码。即一方先发送认证要求给另一方，接着使用从另一方接收到的质询码计算生成响应码，再返回给对方</p>
+<p><img src="/2019/04/18/HTTP详解/1555507128268.png" alt="1555507128268"></p>
+<h3 id="SSL客户端认证"><a href="#SSL客户端认证" class="headerlink" title="SSL客户端认证"></a>SSL客户端认证</h3><ul>
+<li>接收到需要认证资源的请求，服务器发送Certificate Request报文，要求客户端提供客户端证书</li>
+<li>客户端将证书信息以Client Certificate报文方式发送给服务器</li>
+<li>服务器验证证书通过后方可领取其中公开密钥，开始HTTPS加密通信</li>
+</ul>
+<h2 id="基于HTTP功能的追加协议"><a href="#基于HTTP功能的追加协议" class="headerlink" title="基于HTTP功能的追加协议"></a>基于HTTP功能的追加协议</h2><h3 id="HTTP瓶颈"><a href="#HTTP瓶颈" class="headerlink" title="HTTP瓶颈"></a>HTTP瓶颈</h3><h4 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h4><p>通过js脚本调用和服务器进行http通信，可以从已加载完毕的Web页面上发起请求，只更新局部页面</p>
+<h4 id="Comet"><a href="#Comet" class="headerlink" title="Comet"></a>Comet</h4><p>将响应置于挂起状态，当服务器有内容更新时再返回响应，但会消耗更多资源</p>
+<h3 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h3><p>浏览器和服务器之间的全双工通信标准</p>
+<p>优点：推送功能、减少通信量</p>
+<p>在HTTP连接建立后需要一次握手来告知服务器通信协议改变，Upgrade:websocket</p>
+<p><img src="/2019/04/18/HTTP详解/1555507877036.png" alt="1555507877036"></p>
+<p>服务器可以调用websocket Api来发送数据</p>
+<h2 id="Web攻击"><a href="#Web攻击" class="headerlink" title="Web攻击"></a>Web攻击</h2><h3 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h3><h4 id="跨站脚本攻击"><a href="#跨站脚本攻击" class="headerlink" title="跨站脚本攻击"></a>跨站脚本攻击</h4><p>恶意web用户将代码植入到提供给其它用户使用的页面中，包括HTML代码和客户端脚本，骗取个人信息、窃取Cookie等</p>
+<h5 id="嵌入URL"><a href="#嵌入URL" class="headerlink" title="嵌入URL"></a>嵌入URL</h5><p><img src="/2019/04/18/HTTP详解/1555509389819.png" alt="1555509389819"></p>
+<h5 id="窃取Cookie"><a href="#窃取Cookie" class="headerlink" title="窃取Cookie"></a>窃取Cookie</h5><p><img src="/2019/04/18/HTTP详解/1555509441737.png" alt="1555509441737"></p>
+<p><img src="/2019/04/18/HTTP详解/1555509420941.png" alt="1555509420941"></p>
+<h4 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h4><p><img src="/2019/04/18/HTTP详解/1555509497778.png" alt="1555509497778"></p>
+<p>预防：变量采用占位符进行占位，实现转义</p>
+<h4 id="OS命令注入攻击"><a href="#OS命令注入攻击" class="headerlink" title="OS命令注入攻击"></a>OS命令注入攻击</h4><p>执行非法的操作系统命令，在能调用Shell函数的地方就存在被攻击的风险</p>
+<p><img src="/2019/04/18/HTTP详解/1555509669501.png" alt="1555509669501"></p>
+<p><img src="/2019/04/18/HTTP详解/1555509677609.png" alt="1555509677609"></p>
+<h4 id="HTTP首部注入攻击"><a href="#HTTP首部注入攻击" class="headerlink" title="HTTP首部注入攻击"></a>HTTP首部注入攻击</h4><p>在响应首部字段内插入换行或添加内容，可能设置任何Cookie信息、重定向至任意URL、显示任意主体（HTTP响应截断攻击）</p>
+<p>HTTP响应截断攻击：插入%0D%0A%0D%0A，截断主体</p>
+<h4 id="目录遍历攻击"><a href="#目录遍历攻击" class="headerlink" title="目录遍历攻击"></a>目录遍历攻击</h4><p>通过非法截断不公开的文件目录路径后形成攻击</p>
+<p><img src="/2019/04/18/HTTP详解/1555509957604.png" alt="1555509957604"></p>
+<h3 id="安全漏洞"><a href="#安全漏洞" class="headerlink" title="安全漏洞"></a>安全漏洞</h3><h4 id="强制浏览"><a href="#强制浏览" class="headerlink" title="强制浏览"></a>强制浏览</h4><p><img src="/2019/04/18/HTTP详解/1555510070913.png" alt="1555510070913"></p>
+<h4 id="不正确的错误信息"><a href="#不正确的错误信息" class="headerlink" title="不正确的错误信息"></a>不正确的错误信息</h4><ul>
+<li>Web应用抛出的错误信息：“未注册”信息可以被用于确认账号是否存在</li>
+<li>数据库抛出的错误信息</li>
+</ul>
+<h4 id="开放重定向"><a href="#开放重定向" class="headerlink" title="开放重定向"></a>开放重定向</h4><p>对指定的任意URL做重定向</p>
+<p><img src="/2019/04/18/HTTP详解/1555510186494.png" alt="1555510186494"></p>
+<h4 id="会话管理疏忽"><a href="#会话管理疏忽" class="headerlink" title="会话管理疏忽"></a>会话管理疏忽</h4><p>获取会话ID的途径：推测、窃听、会话固定攻击</p>
+<h5 id="会话固定攻击"><a href="#会话固定攻击" class="headerlink" title="会话固定攻击"></a>会话固定攻击</h5><p><img src="/2019/04/18/HTTP详解/1555556011317.png" alt="1555556011317"></p>
+<h4 id="跨站点请求伪造"><a href="#跨站点请求伪造" class="headerlink" title="跨站点请求伪造"></a>跨站点请求伪造</h4><p>CSRF，利用已认证用户的权限更新设定信息、购买商品、发表评论等</p>
+<p><img src="/2019/04/18/HTTP详解/1555557659047.png" alt="1555557659047"></p>
+<h4 id="点击劫持"><a href="#点击劫持" class="headerlink" title="点击劫持"></a>点击劫持</h4><p>利用透明的按钮或链接做成陷阱覆盖在Web页面上，诱使用户点击</p>
+<h4 id="Dos攻击"><a href="#Dos攻击" class="headerlink" title="Dos攻击"></a>Dos攻击</h4><p>集中利用访问请求导致资源过载；通过攻击安全漏洞使服务停止</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="访问控制（CORS）"><a href="#访问控制（CORS）" class="headerlink" title="访问控制（CORS）"></a>访问控制（CORS）</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">HTTP访问控制（CORS）文档</a></p>
+<h4 id="CORS中间件"><a href="#CORS中间件" class="headerlink" title="CORS中间件"></a>CORS中间件</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Cors</span><span class="params">()</span> <span class="title">gin</span>.<span class="title">HandlerFunc</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        method := c.Request.Method</span><br><span class="line">        fmt.Println(method)</span><br><span class="line">        c.Header(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"*"</span>)</span><br><span class="line">        c.Header(<span class="string">"Access-Control-Allow-Headers"</span>, <span class="string">"Content-Type,AccessToken,X-CSRF-Token, Authorization, Token"</span>)</span><br><span class="line">        c.Header(<span class="string">"Access-Control-Allow-Methods"</span>, <span class="string">"POST, GET, OPTIONS, PUT, PATCH, DELETE"</span>)</span><br><span class="line">        c.Header(<span class="string">"Access-Control-Expose-Headers"</span>, <span class="string">"Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type"</span>)</span><br><span class="line">        c.Header(<span class="string">"Access-Control-Allow-Credentials"</span>, <span class="string">"true"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 放行所有OPTIONS方法，因为有的模板是要请求两次的</span></span><br><span class="line">        <span class="keyword">if</span> method == <span class="string">"OPTIONS"</span> &#123;</span><br><span class="line">            c.AbortWithStatus(http.StatusNoContent)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 处理请求</span></span><br><span class="line">        c.Next()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h3><p><a href="https://jwt.io/introduction/" target="_blank" rel="noopener">英文介绍</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">阮一峰教程</a></p>
+<h3 id="Localstorage"><a href="#Localstorage" class="headerlink" title="Localstorage"></a>Localstorage</h3><p><a href="https://juejin.im/post/5a9fcc5e51882555602074e3" target="_blank" rel="noopener">localstorage 必知必会</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage" target="_blank" rel="noopener">Window.localStorage文档</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机基础/" rel="tag"># 计算机基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/20/SQL语句基础/" rel="next" title="SQL语句基础">
+                <i class="fa fa-chevron-left"></i> SQL语句基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/18/python笔记/" rel="prev" title="python笔记">
+                python笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">huangyt</p>
+              <p class="site-description motion-element" itemprop="description">Blogs of learning CS</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/huangyt39" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP基础"><span class="nav-number">1.</span> <span class="nav-text">HTTP基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URI"><span class="nav-number">1.1.</span> <span class="nav-text">URI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报文"><span class="nav-number">1.2.</span> <span class="nav-text">报文</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#报文VS实体"><span class="nav-number">1.2.1.</span> <span class="nav-text">报文VS实体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求报文"><span class="nav-number">1.2.2.</span> <span class="nav-text">请求报文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应报文"><span class="nav-number">1.2.3.</span> <span class="nav-text">响应报文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP方法"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PUT"><span class="nav-number">1.3.1.</span> <span class="nav-text">PUT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HEAD"><span class="nav-number">1.3.2.</span> <span class="nav-text">HEAD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DELETE"><span class="nav-number">1.3.3.</span> <span class="nav-text">DELETE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OPTIONS"><span class="nav-number">1.3.4.</span> <span class="nav-text">OPTIONS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TRACE"><span class="nav-number">1.3.5.</span> <span class="nav-text">TRACE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CONNECT"><span class="nav-number">1.3.6.</span> <span class="nav-text">CONNECT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分块传输编码"><span class="nav-number">1.4.</span> <span class="nav-text">分块传输编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取部分内容的范围请求"><span class="nav-number">1.5.</span> <span class="nav-text">获取部分内容的范围请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP状态码"><span class="nav-number">2.</span> <span class="nav-text">HTTP状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2XX-成功"><span class="nav-number">2.1.</span> <span class="nav-text">2XX 成功</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#200-OK"><span class="nav-number">2.1.1.</span> <span class="nav-text">200 OK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#204-No-Content"><span class="nav-number">2.1.2.</span> <span class="nav-text">204 No Content</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#206-Partial-Content"><span class="nav-number">2.1.3.</span> <span class="nav-text">206 Partial Content</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3XX-重定向"><span class="nav-number">2.2.</span> <span class="nav-text">3XX 重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#301-Moved-Permanently"><span class="nav-number">2.2.1.</span> <span class="nav-text">301 Moved Permanently</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#302-Found"><span class="nav-number">2.2.2.</span> <span class="nav-text">302 Found</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#303-See-Other"><span class="nav-number">2.2.3.</span> <span class="nav-text">303 See Other</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#304-Not-Modified"><span class="nav-number">2.2.4.</span> <span class="nav-text">304 Not Modified</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#307-Temporary-Redirect"><span class="nav-number">2.2.5.</span> <span class="nav-text">307 Temporary Redirect</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4XX-客户端错误"><span class="nav-number">2.3.</span> <span class="nav-text">4XX 客户端错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#400-Bad-Request"><span class="nav-number">2.3.1.</span> <span class="nav-text">400 Bad Request</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#401-Unauthorized"><span class="nav-number">2.3.2.</span> <span class="nav-text">401 Unauthorized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#403-Forbidden"><span class="nav-number">2.3.3.</span> <span class="nav-text">403 Forbidden</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#404-Not-Found"><span class="nav-number">2.3.4.</span> <span class="nav-text">404 Not Found</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5XX-服务器错误"><span class="nav-number">2.4.</span> <span class="nav-text">5XX 服务器错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#500-Internal-Server-Error"><span class="nav-number">2.4.1.</span> <span class="nav-text">500 Internal Server Error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#502-Bad-Gateway"><span class="nav-number">2.4.2.</span> <span class="nav-text">502 Bad Gateway</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#504-Gateway-Timeout"><span class="nav-number">2.4.3.</span> <span class="nav-text">504 Gateway Timeout</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向"><span class="nav-number">2.5.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#永久重定向之间的区别"><span class="nav-number">2.5.1.</span> <span class="nav-text">永久重定向之间的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#临时重定向的区别"><span class="nav-number">2.5.2.</span> <span class="nav-text">临时重定向的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web服务器"><span class="nav-number">3.</span> <span class="nav-text">Web服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据转发"><span class="nav-number">3.1.</span> <span class="nav-text">数据转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理"><span class="nav-number">3.1.1.</span> <span class="nav-text">代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网关"><span class="nav-number">3.1.2.</span> <span class="nav-text">网关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#隧道"><span class="nav-number">3.1.3.</span> <span class="nav-text">隧道</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">3.2.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端的缓存"><span class="nav-number">3.2.1.</span> <span class="nav-text">客户端的缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存验证"><span class="nav-number">3.2.2.</span> <span class="nav-text">缓存验证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#强校验器"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">强校验器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#弱校验器"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">弱校验器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#带Vary头的响应"><span class="nav-number">3.2.3.</span> <span class="nav-text">带Vary头的响应</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP首部"><span class="nav-number">4.</span> <span class="nav-text">HTTP首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#End2End-VS-HopbyHop"><span class="nav-number">4.0.1.</span> <span class="nav-text">End2End VS HopbyHop</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通用首部"><span class="nav-number">4.1.</span> <span class="nav-text">通用首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cache-Control"><span class="nav-number">4.1.1.</span> <span class="nav-text">Cache-Control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connection"><span class="nav-number">4.1.2.</span> <span class="nav-text">Connection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Date"><span class="nav-number">4.1.3.</span> <span class="nav-text">Date</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pragama"><span class="nav-number">4.1.4.</span> <span class="nav-text">Pragama</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Trailer"><span class="nav-number">4.1.5.</span> <span class="nav-text">Trailer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transfer-Encoding"><span class="nav-number">4.1.6.</span> <span class="nav-text">Transfer-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Upgrade"><span class="nav-number">4.1.7.</span> <span class="nav-text">Upgrade</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Via"><span class="nav-number">4.1.8.</span> <span class="nav-text">Via</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求首部字段"><span class="nav-number">4.2.</span> <span class="nav-text">请求首部字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept"><span class="nav-number">4.2.1.</span> <span class="nav-text">Accept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accep-Charset"><span class="nav-number">4.2.2.</span> <span class="nav-text">Accep-Charset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Encoding"><span class="nav-number">4.2.3.</span> <span class="nav-text">Accept-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Language"><span class="nav-number">4.2.4.</span> <span class="nav-text">Accept-Language</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Authorization"><span class="nav-number">4.2.5.</span> <span class="nav-text">Authorization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Host"><span class="nav-number">4.2.6.</span> <span class="nav-text">Host</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#If-xxx"><span class="nav-number">4.2.7.</span> <span class="nav-text">If-xxx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#If-Modified-Since"><span class="nav-number">4.2.8.</span> <span class="nav-text">If-Modified-Since</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Max-Forwards"><span class="nav-number">4.2.9.</span> <span class="nav-text">Max-Forwards</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Agent"><span class="nav-number">4.2.10.</span> <span class="nav-text">User-Agent</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应首部字段"><span class="nav-number">4.3.</span> <span class="nav-text">响应首部字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ETag"><span class="nav-number">4.3.1.</span> <span class="nav-text">ETag</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Location"><span class="nav-number">4.3.2.</span> <span class="nav-text">Location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WWW-Authenticate"><span class="nav-number">4.3.3.</span> <span class="nav-text">WWW-Authenticate</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实体首部字段"><span class="nav-number">4.4.</span> <span class="nav-text">实体首部字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Allow"><span class="nav-number">4.4.1.</span> <span class="nav-text">Allow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Encoding"><span class="nav-number">4.4.2.</span> <span class="nav-text">Content-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Location"><span class="nav-number">4.4.3.</span> <span class="nav-text">Content-Location</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie相关字段"><span class="nav-number">4.5.</span> <span class="nav-text">Cookie相关字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-Cookie"><span class="nav-number">4.5.1.</span> <span class="nav-text">Set-Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie"><span class="nav-number">4.5.2.</span> <span class="nav-text">Cookie</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他首部字段"><span class="nav-number">4.6.</span> <span class="nav-text">其他首部字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#X-XSS-Protection"><span class="nav-number">4.6.1.</span> <span class="nav-text">X-XSS-Protection</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Web安全"><span class="nav-number">5.</span> <span class="nav-text">Web安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP缺点"><span class="nav-number">5.0.1.</span> <span class="nav-text">HTTP缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS"><span class="nav-number">5.1.</span> <span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证书"><span class="nav-number">5.2.</span> <span class="nav-text">证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS通信"><span class="nav-number">5.3.</span> <span class="nav-text">HTTPS通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#身份认证"><span class="nav-number">6.</span> <span class="nav-text">身份认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BASIC认证"><span class="nav-number">6.1.</span> <span class="nav-text">BASIC认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DIGEST认证"><span class="nav-number">6.2.</span> <span class="nav-text">DIGEST认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSL客户端认证"><span class="nav-number">6.3.</span> <span class="nav-text">SSL客户端认证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于HTTP功能的追加协议"><span class="nav-number">7.</span> <span class="nav-text">基于HTTP功能的追加协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP瓶颈"><span class="nav-number">7.1.</span> <span class="nav-text">HTTP瓶颈</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax"><span class="nav-number">7.1.1.</span> <span class="nav-text">Ajax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Comet"><span class="nav-number">7.1.2.</span> <span class="nav-text">Comet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket"><span class="nav-number">7.2.</span> <span class="nav-text">WebSocket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web攻击"><span class="nav-number">8.</span> <span class="nav-text">Web攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击"><span class="nav-number">8.1.</span> <span class="nav-text">攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#跨站脚本攻击"><span class="nav-number">8.1.1.</span> <span class="nav-text">跨站脚本攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#嵌入URL"><span class="nav-number">8.1.1.1.</span> <span class="nav-text">嵌入URL</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#窃取Cookie"><span class="nav-number">8.1.1.2.</span> <span class="nav-text">窃取Cookie</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL注入攻击"><span class="nav-number">8.1.2.</span> <span class="nav-text">SQL注入攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OS命令注入攻击"><span class="nav-number">8.1.3.</span> <span class="nav-text">OS命令注入攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP首部注入攻击"><span class="nav-number">8.1.4.</span> <span class="nav-text">HTTP首部注入攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目录遍历攻击"><span class="nav-number">8.1.5.</span> <span class="nav-text">目录遍历攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全漏洞"><span class="nav-number">8.2.</span> <span class="nav-text">安全漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#强制浏览"><span class="nav-number">8.2.1.</span> <span class="nav-text">强制浏览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不正确的错误信息"><span class="nav-number">8.2.2.</span> <span class="nav-text">不正确的错误信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开放重定向"><span class="nav-number">8.2.3.</span> <span class="nav-text">开放重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#会话管理疏忽"><span class="nav-number">8.2.4.</span> <span class="nav-text">会话管理疏忽</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#会话固定攻击"><span class="nav-number">8.2.4.1.</span> <span class="nav-text">会话固定攻击</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨站点请求伪造"><span class="nav-number">8.2.5.</span> <span class="nav-text">跨站点请求伪造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#点击劫持"><span class="nav-number">8.2.6.</span> <span class="nav-text">点击劫持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dos攻击"><span class="nav-number">8.2.7.</span> <span class="nav-text">Dos攻击</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">9.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问控制（CORS）"><span class="nav-number">9.1.</span> <span class="nav-text">访问控制（CORS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CORS中间件"><span class="nav-number">9.1.1.</span> <span class="nav-text">CORS中间件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JWT"><span class="nav-number">9.2.</span> <span class="nav-text">JWT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Localstorage"><span class="nav-number">9.3.</span> <span class="nav-text">Localstorage</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyt</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

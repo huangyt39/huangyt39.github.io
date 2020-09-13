@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机基础,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="链路层概述链路层协议采取的动作包括差错检测、重传、流量控制和随机接入 链路层协议的任务：将网络层的数据报通过路径中的单端链路节点到节点地传送 数据报在不同的链路上可能由不同链路层协议所承载 链路层能提供的服务 成帧 链路接入 可靠交付通过确认和重传取得 流量控制 差错检测和纠正 半全工和双全工：可否同时传输和接收  链路层的主体部分在网络适配器中实现，也称为网络接口卡 差错检测和纠错比特级差错检测">
+<meta name="keywords" content="计算机基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网总结（五）：链路层">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/计网总结（五）：链路层/index.html">
+<meta property="og:site_name" content="MyBlog">
+<meta property="og:description" content="链路层概述链路层协议采取的动作包括差错检测、重传、流量控制和随机接入 链路层协议的任务：将网络层的数据报通过路径中的单端链路节点到节点地传送 数据报在不同的链路上可能由不同链路层协议所承载 链路层能提供的服务 成帧 链路接入 可靠交付通过确认和重传取得 流量控制 差错检测和纠正 半全工和双全工：可否同时传输和接收  链路层的主体部分在网络适配器中实现，也称为网络接口卡 差错检测和纠错比特级差错检测">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-10T14:57:46.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网总结（五）：链路层">
+<meta name="twitter:description" content="链路层概述链路层协议采取的动作包括差错检测、重传、流量控制和随机接入 链路层协议的任务：将网络层的数据报通过路径中的单端链路节点到节点地传送 数据报在不同的链路上可能由不同链路层协议所承载 链路层能提供的服务 成帧 链路接入 可靠交付通过确认和重传取得 流量控制 差错检测和纠正 半全工和双全工：可否同时传输和接收  链路层的主体部分在网络适配器中实现，也称为网络接口卡 差错检测和纠错比特级差错检测">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/10/计网总结（五）：链路层/">
+
+
+
+
+
+  <title>计网总结（五）：链路层 | MyBlog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MyBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/计网总结（五）：链路层/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangyt">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MyBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计网总结（五）：链路层</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-10T22:50:42+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>链路层协议采取的动作包括差错检测、重传、流量控制和随机接入</p>
+<p>链路层协议的任务：将网络层的数据报通过路径中的单端链路节点到节点地传送</p>
+<p>数据报在不同的链路上可能由不同链路层协议所承载</p>
+<h4 id="链路层能提供的服务"><a href="#链路层能提供的服务" class="headerlink" title="链路层能提供的服务"></a>链路层能提供的服务</h4><ul>
+<li>成帧</li>
+<li>链路接入</li>
+<li>可靠交付通过确认和重传取得</li>
+<li>流量控制</li>
+<li>差错检测和纠正</li>
+<li>半全工和双全工：可否同时传输和接收</li>
+</ul>
+<p>链路层的主体部分在网络适配器中实现，也称为网络接口卡</p>
+<h3 id="差错检测和纠错"><a href="#差错检测和纠错" class="headerlink" title="差错检测和纠错"></a>差错检测和纠错</h3><p>比特级差错检测和纠错</p>
+<h4 id="奇偶校验"><a href="#奇偶校验" class="headerlink" title="奇偶校验"></a>奇偶校验</h4><h5 id="奇检测"><a href="#奇检测" class="headerlink" title="奇检测"></a>奇检测</h5><p>包含一个附加比特，使得d+1个比特中1的总数总为奇数；偶检测相反</p>
+<p>只能检测奇数个比特差错</p>
+<h5 id="二维奇偶校验"><a href="#二维奇偶校验" class="headerlink" title="二维奇偶校验"></a>二维奇偶校验</h5><p>可以纠错单个比特差错，可以检测（但不能纠正）一个分组中两个比特差错的任何组合</p>
+<h4 id="检验和方法"><a href="#检验和方法" class="headerlink" title="检验和方法"></a>检验和方法</h4><p>将k比特的整数加起来，并且用得到的和作为差错检测比特</p>
+<h4 id="循环冗余检测"><a href="#循环冗余检测" class="headerlink" title="循环冗余检测"></a>循环冗余检测</h4><ul>
+<li>r+1比特模式，R有r个比特</li>
+<li>CRC采用模2算术操作，加法不进位减法不借位</li>
+</ul>
+<p>接收方检验：用G去除d+r，余数为0则无差错</p>
+<h3 id="多路访问协议"><a href="#多路访问协议" class="headerlink" title="多路访问协议"></a>多路访问协议</h3><h4 id="信道划分协议"><a href="#信道划分协议" class="headerlink" title="信道划分协议"></a>信道划分协议</h4><h5 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h5><ul>
+<li>时分多路复用（TDM）：将时间划分为时间帧，并进一步划分为N个时隙</li>
+<li>频分多路复用（FDM）</li>
+<li>码分多址（CDMA）：每个节点分配不同的编码</li>
+</ul>
+<h5 id="FDM、TDM的缺陷"><a href="#FDM、TDM的缺陷" class="headerlink" title="FDM、TDM的缺陷"></a>FDM、TDM的缺陷</h5><ul>
+<li>节点被限制在R/N的平均速率，即使它为唯一有分组要发送的节点</li>
+<li>节点必须总是等待它再传输序列中的轮次，即使它是唯一一个有帧要发送的节点</li>
+</ul>
+<h5 id="FDM、TDM优点"><a href="#FDM、TDM优点" class="headerlink" title="FDM、TDM优点"></a>FDM、TDM优点</h5><ul>
+<li>避免碰撞、公平划分带宽</li>
+</ul>
+<h5 id="CMDA"><a href="#CMDA" class="headerlink" title="CMDA"></a>CMDA</h5><p>CDMA对每个节点只分配一种不同的编码，不同的节点能同时传输，互不干扰</p>
+<h4 id="随机接入协议"><a href="#随机接入协议" class="headerlink" title="随机接入协议"></a>随机接入协议</h4><p>一个节点总是以信道的全部速率进行发送，有碰撞时，涉及碰撞的节点反复重发它的帧，直至无碰撞为止。但不是立刻重发，而是等待一个随机时延</p>
+<h5 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h5><p>当有大量活跃节点且每个节点总有大量的帧要发送时，长期运行中成功时隙的份额</p>
+<h5 id="时隙ALOHA"><a href="#时隙ALOHA" class="headerlink" title="时隙ALOHA"></a>时隙ALOHA</h5><p>如果有碰撞，节点在时隙结束之前检测到这次碰撞，以概率p在后续每个时隙中重传它的帧，直到该帧被无碰撞地传输出去</p>
+<p>优点：只有一个活跃节点时工作出色</p>
+<p>当有N个节点时其效率为Np(1-p)^(N-1)，最大效率约为1/2e(0.37)</p>
+<h5 id="ALOHA"><a href="#ALOHA" class="headerlink" title="ALOHA"></a>ALOHA</h5><p>若发生碰撞，下一时隙以p概率重传该帧，以(1-p)概率等待一帧；等待之后如前</p>
+<p>最大效率为1/2e</p>
+<h5 id="载波侦听多路访问CSMA"><a href="#载波侦听多路访问CSMA" class="headerlink" title="载波侦听多路访问CSMA"></a>载波侦听多路访问CSMA</h5><ul>
+<li>载波侦听：发送前先侦听，若空闲则发送，否则等待</li>
+<li>碰撞检测：若碰撞则停止传输</li>
+</ul>
+<p>有碰撞检测的CSMA：CSMA/CD</p>
+<p>由于存在信道传播时延，即使进行了载波侦听，仍可能出现碰撞。信道传输时延越大，载波侦听节点越可能不能侦听到网络中另一节点已开始传输</p>
+<h4 id="轮流协议"><a href="#轮流协议" class="headerlink" title="轮流协议"></a>轮流协议</h4><h5 id="轮询协议"><a href="#轮询协议" class="headerlink" title="轮询协议"></a>轮询协议</h5><p>指定节点之一为主节点，主节点以循环的方式轮询每个节点</p>
+<p>缺点：</p>
+<ul>
+<li>若只有一个节点时活跃的，主节点也必须依次轮询</li>
+<li>若主节点有故障，整个信道不可操作</li>
+</ul>
+<h5 id="令牌传递协议"><a href="#令牌传递协议" class="headerlink" title="令牌传递协议"></a>令牌传递协议</h5><p>没有主节点，有帧要发送的节点才持有令牌，否则将令牌转发，效率高</p>
+<p>缺点：一个节点的故障会使整个信道崩溃</p>
+<h3 id="LANs"><a href="#LANs" class="headerlink" title="LANs"></a>LANs</h3><p>LAN：Local Area Network 局域网</p>
+<h4 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h4><p>LAN地址、物理地址、MAC地址</p>
+<p>同个子网下，数据链路层在网络适配器间传输数据使用的地址标识</p>
+<p>长度6个字节，每个字节为一对16进制数，具有扁平结构（所以具备可迁移性）</p>
+<p>MAC广播地址：FF-FF-FF-FF-FF-FF</p>
+<h4 id="地址解析协议ARP"><a href="#地址解析协议ARP" class="headerlink" title="地址解析协议ARP"></a>地址解析协议ARP</h4><p>将网络层地址转换为链路层地址</p>
+<p>每个节点（主机或路由器）的ARP模块都有一个ARP表</p>
+<h5 id="DNS和ARP的区别"><a href="#DNS和ARP的区别" class="headerlink" title="DNS和ARP的区别"></a>DNS和ARP的区别</h5><p>DNS为因特网中任何地方的主机解析主机名，但ARP只为同一个子网下的节点解析IP地址</p>
+<h5 id="ARP表"><a href="#ARP表" class="headerlink" title="ARP表"></a>ARP表</h5><table>
+<thead>
+<tr>
+<th>IP地址</th>
+<th>MAC地址</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>222.222.222.221</td>
+<td>88-B2-2F-54-1A-0F</td>
+<td>13:45:00</td>
+</tr>
+</tbody>
+</table>
+<p>生存期（TTL）：从表中删除每个映射的时间</p>
+<h5 id="ARP寻址的过程"><a href="#ARP寻址的过程" class="headerlink" title="ARP寻址的过程"></a>ARP寻址的过程</h5><ul>
+<li>发送节点构造并广播ARP查询分组，其中包括发送节点和接受节点的MAC地址和IP地址（接受节点的MAC地址为广播地址）</li>
+<li>子网中的适配器接收后，向上传递给节点中的ARP模块，检查IP地址是否与ARP分组中的匹配</li>
+<li>一个匹配的节点给查询节点发送回一个响应ARP分组</li>
+<li>发送节点更新ARP表</li>
+</ul>
+<h5 id="发送数据报到子网以外的节点"><a href="#发送数据报到子网以外的节点" class="headerlink" title="发送数据报到子网以外的节点"></a>发送数据报到子网以外的节点</h5><p>源IP地址，源MAC地址：主机的IP地址和MAC地址</p>
+<p>目的IP地址，目的MAC地址：目的主机IP地址，网关的MAC地址（路由器响应接口的MAC地址）</p>
+<p>若直接使用目的主机的MAC地址，子网中的适配器都不会将其传递到网络层，因为该帧的目的地址都不与子网中适配器的MAC地址匹配</p>
+<p>具体过程：</p>
+<ul>
+<li>主机通过ARP获取通往目的子网的路由器与本地网相连端口的MAC地址，创建帧并将其放入子网中</li>
+<li>路由器接收该帧，并将数据报交付给网络层，查询转发表，获取转发接口后，将数据转发到该接口</li>
+<li>接口将数据报交付给其适配器，适配器将数据报封装到一个新的帧中，该帧的目的地址为最终目的地址的MAC地址（MAC地址通过ARP获得），同时源MAC地址为此时适配器的MAC地址</li>
+</ul>
+<h4 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h4><p>提供无连接、不可靠服务</p>
+<h5 id="以太网帧结构"><a href="#以太网帧结构" class="headerlink" title="以太网帧结构"></a>以太网帧结构</h5><ul>
+<li>数据字段 46-1500字节：以太网最大传输单元（MTU）为1500字节，数据段最小长度为46字节，如果不足需要填充</li>
+<li>目的地址 6字节：目的适配器的MAC地址</li>
+<li>源地址 6字节：传输该帧到LAN上的适配器的MAC地址</li>
+<li>类型字段 2字节：允许以太网复用多种网络协议</li>
+<li>循环冗余检测CRC 4字节：目的是使得接收适配器检测帧中是否进入了差错</li>
+<li>前同步码 8字节：前七个字节为10101010，最后一个字节为10101011，用于唤醒接收适配器，同步其时钟与发送方时钟</li>
+</ul>
+<h5 id="CSMA-CD"><a href="#CSMA-CD" class="headerlink" title="CSMA/CD"></a>CSMA/CD</h5><p>以太网的多路访问协议</p>
+<p>CSMA/CD机制：</p>
+<ul>
+<li>适配器可以在任何时刻开始传输，没有时隙概念</li>
+<li>载波侦听：当适配器侦听到有其他适配器正在传输，不传输帧</li>
+<li>碰撞检测：当传输中的适配器检测到有其他适配器正在传输，终止传输</li>
+<li>重传前适配器等待一个随机时间，通常比传输一帧的时间短</li>
+</ul>
+<p>CSMA/CD工作方式：</p>
+<ul>
+<li>适配器从网络层得到一个数据报，准备一个以太网帧并放到适配器缓存区中</li>
+<li>若适配器侦听到信道空闲，开始传输</li>
+<li>传输过程中监视来自其他适配器的信号能量</li>
+<li>如果检测到来自其他适配器的信号能量，停止传输</li>
+<li>中止后适配器进入<strong>指数后退</strong>阶段，在该帧经受了n次连续碰撞后，适配器随机从{0,1,2,…,2^m-1}为K选择一个值，m=min{n,10}，适配器等待K*512比特时间，返回第二步（随机、指数增长的上界）</li>
+</ul>
+<h5 id="以太网效率"><a href="#以太网效率" class="headerlink" title="以太网效率"></a>以太网效率</h5><p>网线越长，效率越低</p>
+<h4 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h4><p>交换机是即插即用设备</p>
+<h5 id="交换机功能"><a href="#交换机功能" class="headerlink" title="交换机功能"></a>交换机功能</h5><ul>
+<li><p>过滤：决定一个帧应该转发还是丢弃</p>
+</li>
+<li><p>转发：决定一个帧应该被导向哪个接口，并移动帧</p>
+</li>
+<li><p>借助交换机表完成，交换机表：</p>
+<p>| MAC地址           | 到达节点的交换机接口 | 表项放置在表中的时间 |<br>| —————– | ——————– | ——————– |<br>| 62-FE-F7-11-89-A3 | 1                    | 9:32                 |</p>
+</li>
+</ul>
+<h5 id="交换机工作过程"><a href="#交换机工作过程" class="headerlink" title="交换机工作过程"></a>交换机工作过程</h5><p>假定有目的地址DD-DD-DD-DD-DD-DD的帧从交换机接口x到达</p>
+<ul>
+<li>若表中没有DD-DD-DD-DD-DD-DD的表项，交换机广播该帧</li>
+<li>若存在表项将DD-DD-DD-DD-DD-DD与接口x联系起来，交换机丢弃该帧（过滤功能）</li>
+<li>若存在表项将DD-DD-DD-DD-DD-DD与接口y（!= x）联系起来，交换机将该帧转发到y接口，并将信息添加到表项中</li>
+</ul>
+<h5 id="自学习"><a href="#自学习" class="headerlink" title="自学习"></a>自学习</h5><ul>
+<li>交换机表初始为空</li>
+<li>对于接口收到的每个帧，交换机在其表中记录<ul>
+<li>该帧源地址字段中的MAC地址</li>
+<li>该帧到达的接口</li>
+<li>当前的时间</li>
+</ul>
+</li>
+<li>接下来一段时间（老化期）中，交换机没有接收到以该址为源地址的帧，则删除该地址</li>
+</ul>
+<h5 id="交换机的性质"><a href="#交换机的性质" class="headerlink" title="交换机的性质"></a>交换机的性质</h5><ul>
+<li>消除碰撞</li>
+<li>异质的链路：交换机将链路彼此隔离</li>
+<li>管理</li>
+</ul>
+<h5 id="交换机和路由器的比较"><a href="#交换机和路由器的比较" class="headerlink" title="交换机和路由器的比较"></a>交换机和路由器的比较</h5><ul>
+<li>由于交换机只需要查看二层数据帧 的头部即可决策转发地址，策略十分简单，可以直接通过硬件芯片实现相应功能，所以可以做到廉价高速，被大量应用在接入层。</li>
+<li>而路由器由于需要处理跨网络的连接，必须在接收到完整的 IP数据包 后才能转发数据，路由协议又比较复杂，所以只能使用软件的方式实现相应的功能，要达到高性能只能付出更高的价格</li>
+<li>交换机的优缺点<ul>
+<li>优点：即插即用；具有相对高的分组过滤和转发速率</li>
+<li>缺点：对广播风暴不提供保护措施</li>
+</ul>
+</li>
+<li>路由器的优缺点<ul>
+<li>优点：即使网络存在冗余路径，分组也不会通过路由器循环；对第二层的广播风暴提供了防火墙保护</li>
+<li>缺点：非即插即用；处理时间较长</li>
+</ul>
+</li>
+</ul>
+<h4 id="PPP"><a href="#PPP" class="headerlink" title="PPP"></a>PPP</h4><p>高级数据链路控制协议（HDLC）</p>
+<h5 id="PPP数据成帧"><a href="#PPP数据成帧" class="headerlink" title="PPP数据成帧"></a>PPP数据成帧</h5><ul>
+<li>标志 1字节</li>
+<li>地址 1字节</li>
+<li>控制 1字节</li>
+<li>协议 1或2字节</li>
+<li>信息 可变长度</li>
+<li>检验和 2或4字节</li>
+<li>标志 1字节</li>
+</ul>
+<h4 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h4><p>局域网缺点</p>
+<ul>
+<li>缺乏流量隔离</li>
+<li>交换机的无效使用</li>
+<li>管理用户</li>
+</ul>
+<p>支持VLAN的交换机允许经一个单一的物理局域网基础设施定义多个虚拟局域网</p>
+<h3 id="多协议标签交换MPLS"><a href="#多协议标签交换MPLS" class="headerlink" title="多协议标签交换MPLS"></a>多协议标签交换MPLS</h3><h4 id="MPLS首部"><a href="#MPLS首部" class="headerlink" title="MPLS首部"></a>MPLS首部</h4><p>标签、实验、S、TTL</p>
+<h3 id="Web请求"><a href="#Web请求" class="headerlink" title="Web请求"></a>Web请求</h3><p>DHCP（UDP）、AQP、DNS（UDP）、HTTP、FTP</p>
+<p>RIP/OSPF、BGP</p>
+<p>详见PPT 或 课本p330</p>
+<h4 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h4><ul>
+<li>DHCP请求报文 生成UDP报文段 放入以太网帧 广播</li>
+<li>被分解 CIDR分配地址 收到DHCPACK</li>
+</ul>
+<h4 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h4><ul>
+<li>DNS查询报文</li>
+<li>ARP查询报文查询网关路由器MAC地址</li>
+<li>ARP回答，获取网关路由器的MAC地址</li>
+</ul>
+<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><ul>
+<li>网关路由器接收转发 通过域内协议和域间协议BGP</li>
+<li>找到DNS源记录 查询权威DNS 生成DNS回答报文 放入UDP IP数据报 </li>
+</ul>
+<h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h4><ul>
+<li>生成TCP套接字</li>
+<li>三次握手：TCPSYN报文段 TCPSYNACK报文段</li>
+</ul>
+<h4 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h4><ul>
+<li>HTTP请求 HTTP GET报文</li>
+<li>服务器生成HTTP响应报文 放入请求内容 发送到TCP套接字</li>
+<li>获取响应 渲染</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机基础/" rel="tag"># 计算机基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/10/计网总结（四）：网络层/" rel="next" title="计网总结（四）：网络层">
+                <i class="fa fa-chevron-left"></i> 计网总结（四）：网络层
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/10/计网总结（六）：无线网络/" rel="prev" title="计网总结（六）：无线网络">
+                计网总结（六）：无线网络 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">huangyt</p>
+              <p class="site-description motion-element" itemprop="description">Blogs of learning CS</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/huangyt39" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#链路层"><span class="nav-number">1.</span> <span class="nav-text">链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链路层能提供的服务"><span class="nav-number">1.1.1.</span> <span class="nav-text">链路层能提供的服务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#差错检测和纠错"><span class="nav-number">1.2.</span> <span class="nav-text">差错检测和纠错</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#奇偶校验"><span class="nav-number">1.2.1.</span> <span class="nav-text">奇偶校验</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#奇检测"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">奇检测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二维奇偶校验"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">二维奇偶校验</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检验和方法"><span class="nav-number">1.2.2.</span> <span class="nav-text">检验和方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环冗余检测"><span class="nav-number">1.2.3.</span> <span class="nav-text">循环冗余检测</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多路访问协议"><span class="nav-number">1.3.</span> <span class="nav-text">多路访问协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#信道划分协议"><span class="nav-number">1.3.1.</span> <span class="nav-text">信道划分协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分类"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FDM、TDM的缺陷"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">FDM、TDM的缺陷</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FDM、TDM优点"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">FDM、TDM优点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CMDA"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">CMDA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#随机接入协议"><span class="nav-number">1.3.2.</span> <span class="nav-text">随机接入协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#效率"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#时隙ALOHA"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">时隙ALOHA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ALOHA"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">ALOHA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#载波侦听多路访问CSMA"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">载波侦听多路访问CSMA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#轮流协议"><span class="nav-number">1.3.3.</span> <span class="nav-text">轮流协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#轮询协议"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">轮询协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#令牌传递协议"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">令牌传递协议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LANs"><span class="nav-number">1.4.</span> <span class="nav-text">LANs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MAC地址"><span class="nav-number">1.4.1.</span> <span class="nav-text">MAC地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#地址解析协议ARP"><span class="nav-number">1.4.2.</span> <span class="nav-text">地址解析协议ARP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DNS和ARP的区别"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">DNS和ARP的区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ARP表"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">ARP表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ARP寻址的过程"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">ARP寻址的过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#发送数据报到子网以外的节点"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">发送数据报到子网以外的节点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以太网"><span class="nav-number">1.4.3.</span> <span class="nav-text">以太网</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#以太网帧结构"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">以太网帧结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CSMA-CD"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">CSMA/CD</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#以太网效率"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">以太网效率</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交换机"><span class="nav-number">1.4.4.</span> <span class="nav-text">交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#交换机功能"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">交换机功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交换机工作过程"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">交换机工作过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自学习"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">自学习</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交换机的性质"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">交换机的性质</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交换机和路由器的比较"><span class="nav-number">1.4.4.5.</span> <span class="nav-text">交换机和路由器的比较</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PPP"><span class="nav-number">1.4.5.</span> <span class="nav-text">PPP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PPP数据成帧"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">PPP数据成帧</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VLAN"><span class="nav-number">1.4.6.</span> <span class="nav-text">VLAN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多协议标签交换MPLS"><span class="nav-number">1.5.</span> <span class="nav-text">多协议标签交换MPLS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MPLS首部"><span class="nav-number">1.5.1.</span> <span class="nav-text">MPLS首部</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web请求"><span class="nav-number">1.6.</span> <span class="nav-text">Web请求</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DHCP"><span class="nav-number">1.6.1.</span> <span class="nav-text">DHCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ARP"><span class="nav-number">1.6.2.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS"><span class="nav-number">1.6.3.</span> <span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP"><span class="nav-number">1.6.4.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP"><span class="nav-number">1.6.5.</span> <span class="nav-text">HTTP</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyt</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
