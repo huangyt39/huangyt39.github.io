@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Go语言编程细节 type 相关的定义可以抽到 xxx/types 的目录下，好处是可以避免循环引用 client 尽量复用，防止开了很多个客户端没有关闭导致 goroutine 数量暴涨 json.rawMessage 适用于根据情况如 type 来解结构体的情况 结构体作为数据库 Model 时字段要大写，并且要与数据库中对应字段一致 方便单测的编程技巧 https://juejin.im/p">
+<meta name="keywords" content="golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言">
+<meta property="og:url" content="http://yoursite.com/2020/07/19/Go语言/index.html">
+<meta property="og:site_name" content="MyBlog">
+<meta property="og:description" content="Go语言编程细节 type 相关的定义可以抽到 xxx/types 的目录下，好处是可以避免循环引用 client 尽量复用，防止开了很多个客户端没有关闭导致 goroutine 数量暴涨 json.rawMessage 适用于根据情况如 type 来解结构体的情况 结构体作为数据库 Model 时字段要大写，并且要与数据库中对应字段一致 方便单测的编程技巧 https://juejin.im/p">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Go语言/image-20200722233914366.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Go语言/image-20200724171706774.png">
+<meta property="og:updated_time" content="2020-09-14T03:56:57.896Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go语言">
+<meta name="twitter:description" content="Go语言编程细节 type 相关的定义可以抽到 xxx/types 的目录下，好处是可以避免循环引用 client 尽量复用，防止开了很多个客户端没有关闭导致 goroutine 数量暴涨 json.rawMessage 适用于根据情况如 type 来解结构体的情况 结构体作为数据库 Model 时字段要大写，并且要与数据库中对应字段一致 方便单测的编程技巧 https://juejin.im/p">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/19/Go语言/image-20200722233914366.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/07/19/Go语言/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Go语言 | MyBlog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MyBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/Go语言/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="huangyt">
+      <meta itemprop="description" content="Blogs of learning CS">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MyBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-19 21:47:08" itemprop="dateCreated datePublished" datetime="2020-07-19T21:47:08+08:00">2020-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-14 11:56:57" itemprop="dateModified" datetime="2020-09-14T11:56:57+08:00">2020-09-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Go语言"><a href="#Go语言" class="headerlink" title="Go语言"></a>Go语言</h1><h2 id="编程细节"><a href="#编程细节" class="headerlink" title="编程细节"></a>编程细节</h2><ul>
+<li>type 相关的定义可以抽到 xxx/types 的目录下，好处是可以避免循环引用</li>
+<li>client 尽量复用，防止开了很多个客户端没有关闭导致 goroutine 数量暴涨</li>
+<li>json.rawMessage 适用于根据情况如 type 来解结构体的情况</li>
+<li>结构体作为数据库 Model 时字段要大写，并且要与数据库中对应字段一致</li>
+<li>方便单测的编程技巧 <a href="https://juejin.im/post/5ce93447e51d45775746b8b0" target="_blank" rel="noopener">https://juejin.im/post/5ce93447e51d45775746b8b0</a></li>
+</ul>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><h3 id="go-lint"><a href="#go-lint" class="headerlink" title="go-lint"></a>go-lint</h3><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="基础数据结构"><a href="#基础数据结构" class="headerlink" title="基础数据结构"></a>基础数据结构</h3><h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>string是不可变的，不能更改，故两个副本共享string的内存是安全的，s[:n]的代价也很低</p>
+<h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><p>UTF-8 通过第一个字节开头的1来标示需要用到多少个字节</p>
+<p><img src="/2020/07/19/Go语言/image-20200722233914366.png" alt="image-20200722233914366"></p>
+<p>Strings bytes strconv unicode 包提供处理字符串的函数</p>
+<p>string 操作开销较大，可以使用 bytes.Buffer</p>
+<h3 id="复杂类型"><a href="#复杂类型" class="headerlink" title="复杂类型"></a>复杂类型</h3><h4 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h4><p>数组相当于一个固定量而非指针，所以复制传值的开销过大，切片就是解决方案</p>
+<h4 id="Slice"><a href="#Slice" class="headerlink" title="Slice"></a>Slice</h4><p><a href="https://halfrost.com/go_slice/" target="_blank" rel="noopener">https://halfrost.com/go_slice/</a></p>
+<h4 id="Maps"><a href="#Maps" class="headerlink" title="Maps"></a>Maps</h4><p><img src="/2020/07/19/Go语言/image-20200724171706774.png" alt="image-20200724171706774"></p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="Panic-和-Recover"><a href="#Panic-和-Recover" class="headerlink" title="Panic 和 Recover"></a>Panic 和 Recover</h4><p>Panic 会依次（先进先出）调用本协程的 defer() 后退出程序</p>
+<p>Recover 会捕捉处理 panic，可以处理本协程的 panic，保证程序不会挂掉</p>
+<h4 id="函数引用"><a href="#函数引用" class="headerlink" title="函数引用"></a>函数引用</h4><p>函数参数为值的时候传值和传指针都可以，因为 go 会将指针转换为值</p>
+<h3 id="Goroutines-和-Channels"><a href="#Goroutines-和-Channels" class="headerlink" title="Goroutines 和 Channels"></a>Goroutines 和 Channels</h3><p>异步（有缓冲区）的 Channel 用完要 close，不然会阻塞，形成死锁</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/20/高性能MySQL/" rel="prev" title="高性能MySQL">
+      <i class="fa fa-chevron-left"></i> 高性能MySQL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/20/SRE监控告警/" rel="next" title="SRE监控告警">
+      SRE监控告警 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Go语言"><span class="nav-number">1.</span> <span class="nav-text">Go语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编程细节"><span class="nav-number">1.1.</span> <span class="nav-text">编程细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具"><span class="nav-number">1.2.</span> <span class="nav-text">工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#go-lint"><span class="nav-number">1.2.1.</span> <span class="nav-text">go-lint</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础"><span class="nav-number">1.3.</span> <span class="nav-text">基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础数据结构"><span class="nav-number">1.3.1.</span> <span class="nav-text">基础数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#String"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">String</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码"><span class="nav-number">1.3.2.</span> <span class="nav-text">编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂类型"><span class="nav-number">1.3.3.</span> <span class="nav-text">复杂类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Arrays"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Slice"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">Slice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Maps"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">Maps</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">1.3.4.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Panic-和-Recover"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">Panic 和 Recover</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数引用"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">函数引用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Goroutines-和-Channels"><span class="nav-number">1.3.5.</span> <span class="nav-text">Goroutines 和 Channels</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">huangyt</p>
+  <div class="site-description" itemprop="description">Blogs of learning CS</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/huangyt39" title="GitHub → https://github.com/huangyt39" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangyt39@163.com" title="E-Mail → mailto:huangyt39@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangyt</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
